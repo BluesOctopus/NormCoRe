@@ -57,7 +57,8 @@ restored = decompress(encoded.code, config=config, assets=assets)
 ```bash
 PYTHONPATH=src python -m pytest
 PYTHONPATH=src python scripts/evaluate_roundtrip.py \
-  --sources path/to/python/files --assets assets
+  --humaneval path/to/humaneval.json \
+  --starcoder path/to/starcoder.json --assets assets
 ```
 
 The experiment scripts require user-supplied models and datasets. They are
