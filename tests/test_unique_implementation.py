@@ -1,16 +1,17 @@
-"""Guard: Pass A and Pass B each have exactly one live implementation."""
+"""Guard that normalization and shorthanding each have one implementation."""
 
 from __future__ import annotations
 
 import ast
+import json
 from pathlib import Path
 
 import pytest
 
-from normcore_codec.dynamic import apply_dynamic_pass, load_registry
+from normcore_codec.shorthanding import apply_registry_shorthanding, load_registry
 
 METHOD_ROOT = Path(__file__).resolve().parents[1]
-EXPERIMENTS_ROOT = METHOD_ROOT.parent / "recode_experiments"
+EXPERIMENTS_ROOT = METHOD_ROOT / "experiments"
 LIVE_TREES = (
     METHOD_ROOT / "src",
     METHOD_ROOT / "scripts",
@@ -19,12 +20,12 @@ LIVE_TREES = (
 )
 
 UNIQUE_DEFS = {
-    "apply_structural_pass": METHOD_ROOT / "src/normcore_codec/structural/__init__.py",
-    "apply_dynamic_pass": METHOD_ROOT / "src/normcore_codec/dynamic/__init__.py",
-    "invert_dynamic_pass": METHOD_ROOT / "src/normcore_codec/dynamic/__init__.py",
-    "compress": METHOD_ROOT / "src/normcore_codec/pipeline.py",
-    "decompress": METHOD_ROOT / "src/normcore_codec/pipeline.py",
-    "mine_from_sources": METHOD_ROOT / "src/normcore_codec/dynamic/miner.py",
+    "apply_normalization": METHOD_ROOT / "src/normcore_codec/normalization/__init__.py",
+    "apply_registry_shorthanding": METHOD_ROOT / "src/normcore_codec/shorthanding/__init__.py",
+    "restore_registry_shorthanding": METHOD_ROOT / "src/normcore_codec/shorthanding/__init__.py",
+    "compress": METHOD_ROOT / "src/normcore_codec/codec.py",
+    "decompress": METHOD_ROOT / "src/normcore_codec/codec.py",
+    "mine_from_sources": METHOD_ROOT / "src/normcore_codec/shorthanding/mining.py",
 }
 
 
@@ -41,7 +42,7 @@ def _live_python_files() -> list[Path]:
     return files
 
 
-def test_pass_a_and_pass_b_have_exactly_one_definition_each():
+def test_normalization_and_shorthanding_have_one_definition_each():
     found: dict[str, list[Path]] = {name: [] for name in UNIQUE_DEFS}
     for path in _live_python_files():
         try:
@@ -57,7 +58,7 @@ def test_pass_a_and_pass_b_have_exactly_one_definition_each():
 
 
 def test_live_trees_do_not_import_legacy_codec_or_parallel_miners():
-    banned_names = {"mine_v2.py", "mine_v3.py", "evaluate_legacy_samesize.py", "ast_mine.py"}
+    banned_names = {"mine_legacy.py", "evaluate_legacy.py", "ast_mine.py"}
     live_names = {path.name for path in _live_python_files()}
     assert not (banned_names & live_names)
     forbidden = ("from codec.", "from codec import", "import codec.")
@@ -69,13 +70,27 @@ def test_live_trees_do_not_import_legacy_codec_or_parallel_miners():
         assert "legacy_evidence" not in text or "sys.path.insert" not in text
 
 
+def test_release_configuration_has_one_paper_facing_stage_schema():
+    config = json.loads(
+        (METHOD_ROOT / "configs" / "canonical.json").read_text(encoding="utf-8")
+    )
+    assert set(config["attention"]) >= {"normalization", "shorthanding"}
+    assert "pass_a" not in config["attention"]
+    assert "pass_b" not in config["attention"]
+    assert not any(
+        path.name.lower().startswith(("gca", "recode"))
+        for path in (METHOD_ROOT / "src").rglob("*")
+        if path.is_file()
+    )
+
+
 
 def test_load_registry_rejects_a_missing_path(tmp_path: Path):
-    with pytest.raises(FileNotFoundError, match="Pass B registry not found"):
+    with pytest.raises(FileNotFoundError, match="shorthanding registry not found"):
         load_registry(tmp_path / "missing.json")
 
 
-def test_apply_dynamic_pass_does_not_load_an_implicit_registry():
-    encoded, stats = apply_dynamic_pass("name = 1", [])
+def test_apply_registry_shorthanding_does_not_load_an_implicit_registry():
+    encoded, stats = apply_registry_shorthanding("name = 1", [])
     assert encoded == "name = 1"
     assert stats["skipped"] == "no_registry"

@@ -1,5 +1,5 @@
 {
-  "mode": "gca",
+  "mode": "conditional",
   "protected": [
     "class_def",
     "import"
@@ -36,7 +36,7 @@
       ]
     }
   },
-  "pass_a_rules": {
+  "normalization_rules": {
     "enabled_optional": [
       "Assert",
       "AugAssign",
@@ -73,7 +73,7 @@
     "type_pack": false
   },
   "meta": {
-    "pass_a_cfg": {
+    "normalization_cfg": {
       "per_rule_gate": true
     },
     "tiers": {
@@ -105,10 +105,10 @@
         ]
       },
       "low_unlock_default_off": false,
-      "pass_b_l_mode": "boost",
-      "pass_b_boost_beta": 1.0
+      "shorthanding_l_mode": "boost",
+      "shorthanding_boost_beta": 1.0
     },
-    "pass_a_rule_counts": {
+    "normalization_rule_counts": {
       "base": 28,
       "optional": 27,
       "optional_transform": 26,
@@ -116,7 +116,7 @@
       "transform_total": 54,
       "gateable_total": 27
     },
-    "pass_a_optional_gate": {
+    "normalization_optional_gate": {
       "n_enabled": 25,
       "n_disabled": 2,
       "disabled": [
@@ -129,7 +129,7 @@
       ]
     },
     "catalog_coverage": [],
-    "pass_b_reweight": true,
+    "shorthanding_reweight": true,
     "formula": "exp_neg_lambda_i",
     "lambda": 2.0
   }

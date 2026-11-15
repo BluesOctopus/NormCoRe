@@ -7,8 +7,8 @@ from pathlib import Path
 
 _ROOT = Path(__file__).resolve().parent.parent.parent
 _CANDIDATES = (
-    _ROOT / "entropy_tokenizer_v3/data/starcoder_1m_tokens.txt",
     _ROOT / "data/starcoder_1m_tokens.txt",
+    Path.cwd() / "data/starcoder_1m_tokens.txt",
 )
 DEFAULT_CORPUS = next((p for p in _CANDIDATES if p.is_file()), _CANDIDATES[0])
 

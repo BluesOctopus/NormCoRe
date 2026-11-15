@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
-  "method": "RECODE Pass A + Pass B with GCA",
-  "pass_a": {
-    "mode": "gca",
+  "method": "NormCoRe normalization and hybrid shorthanding with Conditional Attention",
+  "normalization": {
+    "mode": "aggressive",
     "per_rule_gate": true,
     "spine_always_on": true
   },
@@ -15,10 +15,10 @@
       "low_threshold": 0.00035,
       "low_unlock_default_off": false
     },
-    "pass_a": {
+    "normalization": {
       "per_rule_gate": true
     },
-    "pass_b": {
+    "shorthanding": {
       "formula": "exp_neg_lambda_i",
       "lambda": 2.0,
       "hard_protect": false,

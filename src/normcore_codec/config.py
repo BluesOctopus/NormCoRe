@@ -10,11 +10,11 @@ from pathlib import Path
 class CodecAssets:
     """Explicit, portable assets consumed by the codec.
 
-    Pass B and GCA never fall back to an implicit working-directory path.
+    The codec never falls back to an implicit working-directory path.
     """
 
     pattern_registry: Path | None = None
-    gca_policy: Path | None = None
+    conditional_policy: Path | None = None
     type_table: Path | None = None
     grammar_binary: Path | None = None
     asset_lock: Path | None = None
@@ -25,7 +25,7 @@ class CodecAssets:
         base = Path(root)
         return cls(
             pattern_registry=base / "registry_canonical.json",
-            gca_policy=base / "policy_canonical.json",
+            conditional_policy=base / "policy_canonical.json",
             type_table=base / "type_specials.json",
             grammar_binary=base / "spy_lang.so",
             asset_lock=base / "ASSET_LOCK.json",
@@ -33,21 +33,20 @@ class CodecAssets:
 
 
 @dataclass(frozen=True)
-class PassAConfig:
+class NormalizationConfig:
     """Structural condensation controls."""
 
-    mode: str = "gca"
+    mode: str = "aggressive"
 
     def __post_init__(self) -> None:
-        if self.mode not in {"gca", "gca1", "conservative", "aggressive"}:
+        if self.mode not in {"conservative", "aggressive"}:
             raise ValueError(
-                "canonical API allows only gca/gca1/conservative/aggressive; "
-                "instance-gated modes are historical"
+                "canonical API allows only conservative/aggressive normalization"
             )
 
 
 @dataclass(frozen=True)
-class PassBConfig:
+class ShorthandingConfig:
     """Semantic shorthanding controls."""
 
     enabled: bool = True
@@ -57,8 +56,8 @@ class PassBConfig:
 class CodecConfig:
     """One immutable configuration for an encode/decode run."""
 
-    pass_a: PassAConfig = field(default_factory=PassAConfig)
-    pass_b: PassBConfig = field(default_factory=PassBConfig)
+    normalization: NormalizationConfig = field(default_factory=NormalizationConfig)
+    shorthanding: ShorthandingConfig = field(default_factory=ShorthandingConfig)
     verify_assets: bool = True
 
     @classmethod
@@ -66,5 +65,8 @@ class CodecConfig:
         return cls()
 
     @classmethod
-    def structural_only(cls, mode: str = "conservative") -> "CodecConfig":
-        return cls(pass_a=PassAConfig(mode=mode), pass_b=PassBConfig(enabled=False))
+    def normalization_only(cls, mode: str = "conservative") -> "CodecConfig":
+        return cls(
+            normalization=NormalizationConfig(mode=mode),
+            shorthanding=ShorthandingConfig(enabled=False),
+        )

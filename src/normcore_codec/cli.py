@@ -8,7 +8,7 @@ import sys
 from pathlib import Path
 
 from normcore_codec.config import CodecAssets, CodecConfig
-from normcore_codec.pipeline import compress, decompress
+from normcore_codec.codec import compress, decompress
 
 
 def main() -> None:
@@ -21,13 +21,13 @@ def main() -> None:
         default=Path(__file__).resolve().parents[2] / "assets",
         help="directory containing locked policy, registry, grammar, and type table",
     )
-    parser.add_argument("--structural-only", action="store_true")
+    parser.add_argument("--normalization-only", action="store_true")
     parser.add_argument("--stats", action="store_true", help="write compression stats to stderr")
     args = parser.parse_args()
 
     text = args.input.read_text(encoding="utf-8") if args.input else sys.stdin.read()
     assets = CodecAssets.from_root(args.assets)
-    config = CodecConfig.structural_only() if args.structural_only else CodecConfig.canonical()
+    config = CodecConfig.normalization_only() if args.normalization_only else CodecConfig.canonical()
     if args.operation == "compress":
         result = compress(text, config=config, assets=assets)
         sys.stdout.write(result.code)

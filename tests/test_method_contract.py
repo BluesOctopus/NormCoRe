@@ -7,14 +7,14 @@ from pathlib import Path
 import pytest
 
 from normcore_codec.assets import AssetValidationError, validate_assets, validate_registry
-from normcore_codec.attention.gca import load_policy
-from normcore_codec.attention.weight import exponential_reward
+from normcore_codec.attention.conditional import load_policy
+from normcore_codec.attention.scoring import exponential_reward
 from normcore_codec.config import CodecAssets
-from normcore_codec.dynamic import PatternEntry, _dp_select, apply_dynamic_pass, invert_dynamic_pass
-from normcore_codec.dynamic.wildcard import bare_goal_token
-from normcore_codec.markers import all_special_tokens
-from normcore_codec.structural.aggressive import idiom_special_tokens
-from normcore_codec.structural.type_pack import load_type_table
+from normcore_codec.shorthanding import PatternEntry, _dp_select, apply_registry_shorthanding, restore_registry_shorthanding
+from normcore_codec.shorthanding.wildcard import bare_goal_token
+from normcore_codec.reversible.markers import all_special_tokens
+from normcore_codec.normalization.idioms import idiom_special_tokens
+from normcore_codec.normalization.type_pack import load_type_table
 from normcore_codec.tokens import get_count_fn
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -30,7 +30,7 @@ def test_figure_exponential_reward_exact():
 
 
 def test_canonical_policy_gates_high_attention_rules():
-    policy = load_policy(ASSETS.gca_policy)
+    policy = load_policy(ASSETS.conditional_policy)
     assert policy.per_rule_gate is True
     assert {"import", "class_def"} <= policy.protected
     assert "ImportFrom" in policy.disabled_optional_rules
@@ -101,10 +101,10 @@ def test_dp_selects_optimal_non_overlapping_matches():
 
 def test_exact_patterns_respect_both_identifier_boundaries():
     registry = [PatternEntry("p", 3.0, "<p_pat>", "name", "exact")]
-    out, stats = apply_dynamic_pass("name rename names", registry)
+    out, stats = apply_registry_shorthanding("name rename names", registry)
     assert out == "<p_pat> rename names"
     assert stats["patterns_applied"] == 1
-    assert invert_dynamic_pass(out, registry) == "name rename names"
+    assert restore_registry_shorthanding(out, registry) == "name rename names"
 
 
 def test_runtime_exact_reward_filters_nonpositive_matches_and_reports_funnel():
@@ -121,7 +121,7 @@ def test_runtime_exact_reward_filters_nonpositive_matches_and_reports_funnel():
         "<long_pat> x": 2,
     }
 
-    out, stats = apply_dynamic_pass(
+    out, stats = apply_registry_shorthanding(
         "long x",
         registry,
         count_fn=lambda value: costs.get(value, len(value)),
@@ -138,7 +138,7 @@ def test_runtime_exact_reward_filters_nonpositive_matches_and_reports_funnel():
     assert stats["selected_compressed_tokens"] == 1
     assert stats["global_reward"] > 0
     assert stats["global_fallback"] is False
-    assert invert_dynamic_pass(out, registry) == "long x"
+    assert restore_registry_shorthanding(out, registry) == "long x"
 
 
 def test_runtime_exact_reward_falls_back_on_nonadditive_global_loss():
@@ -150,7 +150,7 @@ def test_runtime_exact_reward_falls_back_on_nonadditive_global_loss():
         "<long_pat> tail": 4,
     }
 
-    out, stats = apply_dynamic_pass(
+    out, stats = apply_registry_shorthanding(
         "long tail",
         registry,
         count_fn=lambda value: costs.get(value, len(value)),

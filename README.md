@@ -7,7 +7,7 @@ paper source.
 ## Included
 
 - `src/normcore_codec/`: reference implementation and public Python package.
-- `assets/`: registry, structural policy, type table, grammar extension, and
+- `assets/`: registry, normalization policy, type table, grammar extension, and
   provenance lock used by the canonical configuration.
 - `scripts/`: asset validation, round-trip evaluation, and manifest helpers.
 - `experiments/`: optional training and held-out scoring entry points. Models,
@@ -15,7 +15,7 @@ paper source.
 - `paper/`: source and compiled PDF for the accompanying paper.
 
 The codec combines structural condensation with hybrid idiom shorthanding.
-Conditional Attention (GCA) is represented by the frozen policy and registry;
+Conditional Attention is represented by the frozen policy and registry;
 the codec hot path does not load a model. Decoding restores a Python program
 that is AST-equivalent to the input. Comments and other non-semantic layout
 details are not promised to be byte-identical.

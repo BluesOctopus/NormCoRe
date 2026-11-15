@@ -1,26 +1,26 @@
-"""Global Context-aware Attention; instance gating is legacy ablation only.
+"""Conditional Attention policy and scoring helpers.
 
-- ``gca``: offline category map + Pass A gating + Pass B exponential reward
-- ``weight.*`` / ``band_paint``: used by GCA build and legacy ``gated`` ablation
+The model is used offline to produce a frozen policy. The codec hot path only
+consumes that policy; it never loads a model.
 """
 
 from __future__ import annotations
 
-from normcore_codec.attention.band_paint import (
+from normcore_codec.attention.occurrence import (
     align_paint,
     apply_edits_to_paint,
     majority_band,
     paint_from_scores,
 )
-from normcore_codec.attention.gca import (
-    GCAPolicy,
-    build_gca_registry,
+from normcore_codec.attention.conditional import (
+    ConditionalPolicy,
+    build_conditional_registry,
     build_policy_from_attention_cfg,
     load_category_scores,
     load_policy,
     save_policy,
 )
-from normcore_codec.attention.weight import (
+from normcore_codec.attention.scoring import (
     annotate_registry,
     build_attention_tables,
     exponential_reward,
@@ -31,12 +31,12 @@ from normcore_codec.attention.weight import (
 )
 
 __all__ = [
-    "GCAPolicy",
+    "ConditionalPolicy",
     "align_paint",
     "annotate_registry",
     "apply_edits_to_paint",
     "build_attention_tables",
-    "build_gca_registry",
+    "build_conditional_registry",
     "build_policy_from_attention_cfg",
     "exponential_reward",
     "g_one_minus_a",

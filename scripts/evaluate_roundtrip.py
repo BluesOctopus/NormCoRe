@@ -9,11 +9,11 @@ import json
 from pathlib import Path
 
 from normcore_codec import CodecAssets, CodecConfig, compress, decompress
-from normcore_codec.dynamic import load_registry
-from normcore_codec.dynamic.wildcard import bare_goal_token
-from normcore_codec.markers import all_special_tokens
-from normcore_codec.structural.aggressive import idiom_special_tokens
-from normcore_codec.structural.type_pack import load_type_table
+from normcore_codec.shorthanding import load_registry
+from normcore_codec.shorthanding.wildcard import bare_goal_token
+from normcore_codec.reversible.markers import all_special_tokens
+from normcore_codec.normalization.idioms import idiom_special_tokens
+from normcore_codec.normalization.type_pack import load_type_table
 from normcore_codec.tokens import get_count_fn
 
 
@@ -63,7 +63,7 @@ def evaluate(path: Path, *, limit: int | None, assets: CodecAssets) -> dict:
             )
             native_tokens += count_fn(source)
             compressed_tokens += count_fn(result.code)
-            patterns += int(result.stats["pass_b"].get("patterns_applied", 0))
+            patterns += int(result.stats["shorthanding"].get("patterns_applied", 0))
             compile(restored, f"<{sample_id}:restored>", "exec")
             exec_ok += 1
             if ast_key(restored) == source_key:

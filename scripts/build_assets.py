@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build the canonical GCA policy and safe Pass B registry."""
+"""Build the canonical Conditional Attention policy and shorthand registry."""
 
 from __future__ import annotations
 
@@ -8,8 +8,8 @@ import json
 from pathlib import Path
 
 from normcore_codec.assets import sha256_file, validate_registry
-from normcore_codec.attention.gca import (
-    build_gca_registry,
+from normcore_codec.attention.conditional import (
+    build_conditional_registry,
     build_policy_from_attention_cfg,
 )
 
@@ -20,6 +20,7 @@ MASK_SENTINELS = (
     "'''MASK'''",
     "#MASK",
     "__AARI_FMASK__",
+    "__NORMCORE_FMASK__",
     "__RECODE_FMASK__",
 )
 
@@ -53,17 +54,21 @@ def main() -> None:
         for row in source_rows
         if not any(sentinel in str(row.get("pattern", "")) for sentinel in MASK_SENTINELS)
     ]
-    pass_b = attention["pass_b"]
+    # The release schema names the two method stages directly.  The fallback
+    # keeps the builder able to regenerate assets from an older local config.
+    shorthanding_cfg = attention.get("shorthanding") or attention.get("pass_b")
+    if shorthanding_cfg is None:
+        raise KeyError("canonical attention config is missing shorthanding settings")
     bands = (policy.meta.get("tiers") or {}).get("bands")
-    rows, stats = build_gca_registry(
+    rows, stats = build_conditional_registry(
         safe_rows,
         scores,
         threshold=policy.threshold,
-        hard_protect=bool(pass_b["hard_protect"]),
-        formula=str(pass_b["formula"]),
-        lambda_=float(pass_b["lambda"]),
-        rank_by=str(pass_b["rank_by"]),
-        top_k=int(pass_b["top_k"]),
+        hard_protect=bool(shorthanding_cfg["hard_protect"]),
+        formula=str(shorthanding_cfg["formula"]),
+        lambda_=float(shorthanding_cfg["lambda"]),
+        rank_by=str(shorthanding_cfg["rank_by"]),
+        top_k=int(shorthanding_cfg["top_k"]),
         category_bands=bands,
     )
 
@@ -80,7 +85,7 @@ def main() -> None:
                 "schema_version": 1,
                 "patterns": rows,
                 "meta": {
-                    "method": "RECODE",
+                    "method": "NormCoRe",
                     "source_registry": "assets/registry_base.json",
                     "filtered_literal_mask_patterns": len(source_rows) - len(safe_rows),
                     "build": stats,
@@ -116,7 +121,7 @@ def main() -> None:
     files = {}
     for name, path in {
         "pattern_registry": registry_path,
-        "gca_policy": policy_path,
+        "conditional_policy": policy_path,
         "type_table": assets / "type_specials.json",
         "grammar_binary": assets / "spy_lang.so",
         "attention_scores": scores_path,

@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """One-shot migration: rewrite a legacy MASK-fixed registry into typed holes.
 
-This is not a miner and not a Pass B implementation. New RQ registries must be
-produced by ``normcore_codec.dynamic.miner`` from a user-provided source corpus.
+This is not a miner or a second shorthanding implementation. New registries must be
+produced by ``normcore_codec.shorthanding.mining`` from a user-provided source corpus.
 Use this script only when converting a historical table so that
 ``validate_registry``
 accepts it.
@@ -36,10 +36,10 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from normcore_codec.assets import validate_registry  # noqa: E402
-from normcore_codec.markers import PATTERN_END, all_special_tokens  # noqa: E402
+from normcore_codec.reversible.markers import PATTERN_END, all_special_tokens  # noqa: E402
 
 MASK_SENTINEL = re.compile(
-    r'"""MASK"""|\'\'\'MASK\'\'\'|"MASK"|\'MASK\'|#MASK|__RECODE_FMASK__|__AARI_FMASK__'
+    r'"""MASK"""|\'\'\'MASK\'\'\'|"MASK"|\'MASK\'|#MASK|__NORMCORE_FMASK__|__RECODE_FMASK__|__AARI_FMASK__'
 )
 MARKER = re.compile(r"<[^<>]*>")
 IDENTIFIER = re.compile(r"[A-Za-z_][A-Za-z0-9_]*")

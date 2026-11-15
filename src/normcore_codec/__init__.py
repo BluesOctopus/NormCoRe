@@ -1,7 +1,7 @@
 """NormCoRe: normalized and conditional token-reduction codec."""
 
-from .config import CodecAssets, CodecConfig, PassAConfig, PassBConfig
-from .pipeline import (
+from .config import CodecAssets, CodecConfig, NormalizationConfig, ShorthandingConfig
+from .codec import (
     CompressResult,
     PlaceholderLeak,
     compress,
@@ -15,8 +15,8 @@ __all__ = [
     "CodecAssets",
     "CodecConfig",
     "CompressResult",
-    "PassAConfig",
-    "PassBConfig",
+    "NormalizationConfig",
+    "ShorthandingConfig",
     "PlaceholderLeak",
     "compress",
     "decompress",

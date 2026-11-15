@@ -1,4 +1,4 @@
-"""Pass B typed holes and the A->B placeholder conservation contract."""
+"""Typed holes and the normalization-to-shorthanding placeholder contract."""
 
 from __future__ import annotations
 
@@ -6,12 +6,12 @@ import json
 
 import pytest
 
-from normcore_codec import CodecAssets, CodecConfig, PassAConfig, PassBConfig, compress
+from normcore_codec import CodecAssets, CodecConfig, NormalizationConfig, ShorthandingConfig, compress
 from normcore_codec.assets import AssetValidationError, validate_registry
-from normcore_codec.dynamic import apply_dynamic_pass, invert_dynamic_pass, load_registry
-from normcore_codec.mask import count_literal_placeholders, mask_literals, unmask_literals
-from normcore_codec.markers import PATTERN_END
-from normcore_codec.pipeline import PlaceholderLeak
+from normcore_codec.shorthanding import apply_registry_shorthanding, restore_registry_shorthanding, load_registry
+from normcore_codec.reversible.literals import count_literal_placeholders, mask_literals, unmask_literals
+from normcore_codec.reversible.markers import PATTERN_END
+from normcore_codec.codec import PlaceholderLeak
 
 
 def write_registry(tmp_path, rows, name="registry.json"):
@@ -39,20 +39,20 @@ STRING_ROW = {
 def test_identifier_holes_round_trip(tmp_path):
     registry = load_registry(write_registry(tmp_path, [IDENT_ROW]))
     text = "<for_stmt>i range(len(items))<block_start>pass<block_end>"
-    encoded, stats = apply_dynamic_pass(text, registry, band_paint=None)
+    encoded, stats = apply_registry_shorthanding(text, registry, band_paint=None)
     assert stats["patterns_applied"] == 1
     assert encoded.startswith("<t_for_range_len_pat>i;items" + PATTERN_END)
-    assert invert_dynamic_pass(encoded, registry) == text
+    assert restore_registry_shorthanding(encoded, registry) == text
 
 
 def test_string_hole_carries_the_mask_placeholder(tmp_path):
     registry = load_registry(write_registry(tmp_path, [STRING_ROW]))
     text = '<raise>ValueError("MASK")<line_sep>'
-    encoded, stats = apply_dynamic_pass(text, registry, band_paint=None)
+    encoded, stats = apply_registry_shorthanding(text, registry, band_paint=None)
     assert stats["patterns_applied"] == 1
     # The placeholder rides inside the shorthand instead of being deleted.
     assert count_literal_placeholders(encoded) == count_literal_placeholders(text) == 1
-    assert invert_dynamic_pass(encoded, registry) == text
+    assert restore_registry_shorthanding(encoded, registry) == text
 
 
 def test_terminator_keeps_adjacent_statements_apart(tmp_path):
@@ -66,8 +66,8 @@ def test_terminator_keeps_adjacent_statements_apart(tmp_path):
     }
     registry = load_registry(write_registry(tmp_path, [row]))
     text = "self.name=value<line_sep>other=thing"
-    encoded, _ = apply_dynamic_pass(text, registry, band_paint=None)
-    assert invert_dynamic_pass(encoded, registry) == text
+    encoded, _ = apply_registry_shorthanding(text, registry, band_paint=None)
+    assert restore_registry_shorthanding(encoded, registry) == text
 
 
 def test_repeated_hole_index_must_match_the_same_text(tmp_path):
@@ -79,10 +79,10 @@ def test_repeated_hole_index_must_match_the_same_text(tmp_path):
         "freq": 10,
     }
     registry = load_registry(write_registry(tmp_path, [row]))
-    hit, stats = apply_dynamic_pass("count=count+1", registry, band_paint=None)
+    hit, stats = apply_registry_shorthanding("count=count+1", registry, band_paint=None)
     assert stats["patterns_applied"] == 1
-    assert invert_dynamic_pass(hit, registry) == "count=count+1"
-    miss, stats = apply_dynamic_pass("count=total+1", registry, band_paint=None)
+    assert restore_registry_shorthanding(hit, registry) == "count=count+1"
+    miss, stats = apply_registry_shorthanding("count=total+1", registry, band_paint=None)
     assert stats["patterns_applied"] == 0
     assert miss == "count=total+1"
 
@@ -117,13 +117,13 @@ def test_compress_rejects_a_pattern_that_absorbs_a_placeholder(tmp_path):
     }
     assets = CodecAssets(
         pattern_registry=write_registry(tmp_path, [row], "eater.json"),
-        gca_policy=base.gca_policy,
+        conditional_policy=base.conditional_policy,
         type_table=base.type_table,
         grammar_binary=base.grammar_binary,
         asset_lock=None,
     )
     config = CodecConfig(
-        pass_a=PassAConfig(mode="aggressive"), pass_b=PassBConfig(enabled=True), verify_assets=False
+        normalization=NormalizationConfig(mode="aggressive"), shorthanding=ShorthandingConfig(enabled=True), verify_assets=False
     )
     with pytest.raises(PlaceholderLeak):
         compress(source, config=config, assets=assets)

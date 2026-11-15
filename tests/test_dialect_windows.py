@@ -1,10 +1,10 @@
-"""Pass B step-1: mine on Pass-A units, not isolated source windows."""
+"""Mine shorthands on normalized units, not isolated source windows."""
 
 from __future__ import annotations
 
-from normcore_codec.mask import mask_literals
-from normcore_codec.structural import apply_structural_pass
-from normcore_codec.dynamic.miner import (
+from normcore_codec.reversible.literals import mask_literals
+from normcore_codec.normalization import apply_normalization
+from normcore_codec.shorthanding.mining import (
     generalize,
     iter_template_instances,
     split_dialect_units,
@@ -45,7 +45,7 @@ class Solution:
 
 def _mid(source: str) -> str:
     masked, _ = mask_literals(source, fstring_mode="segment")
-    mid, _ = apply_structural_pass(masked, band="aggressive")
+    mid, _ = apply_normalization(masked, band="aggressive")
     return (mid or "").strip()
 
 

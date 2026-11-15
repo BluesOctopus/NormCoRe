@@ -1,19 +1,19 @@
-from normcore_codec.dynamic.wildcard import (
+from normcore_codec.shorthanding.wildcard import (
     WildcardPattern,
     find_wildcard_matches,
     invert_wildcard,
     scope_reference_tokens,
 )
-from normcore_codec.dynamic import apply_dynamic_pass, invert_dynamic_pass, PatternEntry
+from normcore_codec.shorthanding import apply_registry_shorthanding, restore_registry_shorthanding, PatternEntry
 
 
-def test_wildcard_match_on_densified_pass_a_surface():
+def test_wildcard_match_on_normalized_surface():
     row = {
-        "id": "v2_test",
+        "id": "sample_test",
         "pattern": "<if_stmt>__H0__ is None<block_start><return>__H1__<block_end>",
         "reward": 10,
         "type": "wildcard",
-        "goal": "<v2_test_pat>",
+        "goal": "<sample_test_pat>",
     }
     wp = WildcardPattern.from_row(row)
     assert wp is not None
@@ -28,11 +28,11 @@ def test_wildcard_match_on_densified_pass_a_surface():
 
 def test_wildcard_allows_flexible_spaces_between_fixed_tokens():
     row = {
-        "id": "v2_test",
+        "id": "sample_test",
         "pattern": "<if_stmt>__H0__ is None<block_start><return>__H1__<block_end>",
         "reward": 10,
         "type": "wildcard",
-        "goal": "<v2_test_pat>",
+        "goal": "<sample_test_pat>",
     }
     wp = WildcardPattern.from_row(row)
     text = "<if_stmt>data  is None<block_start><return>result<block_end>"
@@ -73,7 +73,7 @@ def test_scope_capture_reuses_prior_identifier_without_dictionary_header():
         "<return>normalize_and_validate(long_variable)<line_sep>"
         "<return>normalize_and_validate(long_variable)<line_sep>"
     )
-    encoded, stats = apply_dynamic_pass(
+    encoded, stats = apply_registry_shorthanding(
         text,
         [entry],
         count_fn=count_fn,
@@ -82,7 +82,7 @@ def test_scope_capture_reuses_prior_identifier_without_dictionary_header():
     assert "<cap_ref_0>" in encoded
     assert stats["scope_compact_matches"] == 1
     assert stats["scope_reference_uses"] == 1
-    assert invert_dynamic_pass(encoded, [entry]) == text
+    assert restore_registry_shorthanding(encoded, [entry]) == text
 
 
 def test_scope_capture_never_references_string_holes():
@@ -94,14 +94,14 @@ def test_scope_capture_never_references_string_holes():
         "wildcard",
     )
     text = '<return>"MASK"<line_sep><return>"MASK"<line_sep>'
-    encoded, stats = apply_dynamic_pass(
+    encoded, stats = apply_registry_shorthanding(
         text,
         [entry],
         scope_capture_slots=4,
     )
     assert "<cap_ref_" not in encoded
     assert stats["scope_compact_matches"] == 0
-    assert invert_dynamic_pass(encoded, [entry]) == text
+    assert restore_registry_shorthanding(encoded, [entry]) == text
 
 
 def test_scope_capture_can_mix_identifier_reference_with_raw_literal():
@@ -137,7 +137,7 @@ def test_scope_capture_can_mix_identifier_reference_with_raw_literal():
         '<return>normalize_and_validate(long_variable,"MASK")<line_sep>'
         '<return>normalize_and_validate(long_variable,"MASK")<line_sep>'
     )
-    encoded, stats = apply_dynamic_pass(
+    encoded, stats = apply_registry_shorthanding(
         text,
         [entry],
         count_fn=count_fn,
@@ -146,7 +146,7 @@ def test_scope_capture_can_mix_identifier_reference_with_raw_literal():
     assert "<cap_ref_0>" in encoded
     assert encoded.count('"MASK"') == 2
     assert stats["scope_compact_matches"] == 1
-    assert invert_dynamic_pass(encoded, [entry]) == text
+    assert restore_registry_shorthanding(encoded, [entry]) == text
 
 
 def test_scope_capture_uses_identifier_from_reconstructed_plain_prefix():
@@ -182,7 +182,7 @@ def test_scope_capture_uses_identifier_from_reconstructed_plain_prefix():
         "long_variable<line_sep>"
         "<return>normalize_and_validate(long_variable)<line_sep>"
     )
-    encoded, stats = apply_dynamic_pass(
+    encoded, stats = apply_registry_shorthanding(
         text,
         [entry],
         count_fn=count_fn,
@@ -190,7 +190,7 @@ def test_scope_capture_uses_identifier_from_reconstructed_plain_prefix():
     )
     assert "<prefix_test_pat><cap_ref_0>" in encoded
     assert stats["scope_compact_matches"] == 1
-    assert invert_dynamic_pass(encoded, [entry]) == text
+    assert restore_registry_shorthanding(encoded, [entry]) == text
 
 
 def test_scope_reference_compacts_plain_identifier_after_exact_goal():
@@ -217,7 +217,7 @@ def test_scope_reference_compacts_plain_identifier_after_exact_goal():
         return total
 
     text = "long_identifier<line_sep>long_identifier+1<line_sep>"
-    encoded, stats = apply_dynamic_pass(
+    encoded, stats = apply_registry_shorthanding(
         text,
         [entry],
         count_fn=count_fn,
@@ -226,7 +226,7 @@ def test_scope_reference_compacts_plain_identifier_after_exact_goal():
     assert "<plain_prefix_test_pat>" in encoded
     assert "<cap_ref_0>" in encoded
     assert stats["scope_plain_reference_uses"] == 1
-    assert invert_dynamic_pass(encoded, [entry]) == text
+    assert restore_registry_shorthanding(encoded, [entry]) == text
 
 
 def test_scope_reference_never_compacts_composite_mask_placeholder():
@@ -250,7 +250,7 @@ def test_scope_reference_never_compacts_composite_mask_placeholder():
         return total
 
     text = "table['MASK']<line_sep>table['MASK']<line_sep>"
-    encoded, stats = apply_dynamic_pass(
+    encoded, stats = apply_registry_shorthanding(
         text,
         [entry],
         count_fn=count_fn,
@@ -258,4 +258,4 @@ def test_scope_reference_never_compacts_composite_mask_placeholder():
     )
     assert encoded == text
     assert stats["scope_plain_reference_uses"] == 0
-    assert invert_dynamic_pass(encoded, [entry]) == text
+    assert restore_registry_shorthanding(encoded, [entry]) == text

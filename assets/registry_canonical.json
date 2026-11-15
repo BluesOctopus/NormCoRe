@@ -4347,7 +4347,7 @@
     }
   ],
   "meta": {
-    "method": "RECODE",
+    "method": "NormCoRe",
     "source_registry": "assets/registry_base.json",
     "filtered_literal_mask_patterns": 286,
     "build": {

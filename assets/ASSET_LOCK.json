@@ -9,15 +9,15 @@
   "files": {
     "pattern_registry": {
       "path": "assets/registry_canonical.json",
-      "sha256": "5ce75fdbdd24e87b4bddd1be5482bf4ff86d5afef4a69c38d87912a218d72c8c"
+      "sha256": "cf1e7005d6b62e4efa503b18b34196cbc7834298d7efce066c11d9960bba1c38"
     },
-    "gca_policy": {
+    "conditional_policy": {
       "path": "assets/policy_canonical.json",
-      "sha256": "de4d5ad130fb69154636e2d74cd50c0395083b6abb5aadd2710a7f2a29b029b5"
+      "sha256": "9a85390c4c09ea224d023ad2294d36d47b7eb71ebc2791ae026f7cd5ed436de5"
     },
     "type_table": {
       "path": "assets/type_specials.json",
-      "sha256": "84d4f6dd05df132362a63b58f7055d8c2cc43c2adb86f82c2c11435c4cfd8ba9"
+      "sha256": "a77558f5332a6ce207fc62ba5a4581a0a361ff74416f53467112ec4d7ef77c5b"
     },
     "grammar_binary": {
       "path": "assets/spy_lang.so",

@@ -1,4 +1,4 @@
-from normcore_codec.dynamic.subtree import (
+from normcore_codec.shorthanding.subtree import (
     SUBTREE_BIND,
     SUBTREE_END,
     apply_subtree_pass,
@@ -33,7 +33,7 @@ def test_subtree_wire_roundtrip():
     assert invert_subtree_pass(encoded) == "x=values[index];y=values[index]"
 
 
-def test_subtree_v2_wire_roundtrip_can_contain_pattern_end():
+def test_subtree_wire_roundtrip_can_contain_pattern_end():
     payload = "<repeat_pat>long_identifier<pat_end>"
     encoded = (
         "x="
@@ -72,7 +72,7 @@ def test_disabled_subtree_pass_is_identity():
     assert stats["skipped"] == "disabled"
 
 
-def test_subtree_pass_binds_repeated_final_wire_window():
+def test_subtree_binds_repeated_final_wire_window():
     payload = "<repeat_pat>long_identifier<pat_end>"
     text = payload + payload
     specials = subtree_reference_tokens(8) | {"<repeat_pat>", "<pat_end>"}

@@ -10,8 +10,8 @@ from pathlib import Path
 from typing import Any
 
 from normcore_codec.config import CodecAssets
-from normcore_codec.dynamic.wildcard import _HOLE_RE, WildcardPattern, bare_goal_token
-from normcore_codec.markers import PATTERN_END
+from normcore_codec.shorthanding.wildcard import _HOLE_RE, WildcardPattern, bare_goal_token
+from normcore_codec.reversible.markers import PATTERN_END
 
 _GOAL_RE = re.compile(r"^<[A-Za-z0-9_]+_pat>$")
 # A pattern may never consume a literal mask as fixed text: collapsing the span
@@ -26,6 +26,7 @@ _MASK_SENTINELS = (
     "'''MASK'''",
     "#MASK",
     "__AARI_FMASK__",
+    "__NORMCORE_FMASK__",
     "__RECODE_FMASK__",
 )
 
@@ -99,7 +100,7 @@ def validate_assets(assets: CodecAssets) -> dict[str, Any]:
 
     required = {
         "pattern_registry": assets.pattern_registry,
-        "gca_policy": assets.gca_policy,
+        "conditional_policy": assets.conditional_policy,
         "type_table": assets.type_table,
         "grammar_binary": assets.grammar_binary,
     }
@@ -116,9 +117,9 @@ def validate_assets(assets: CodecAssets) -> dict[str, Any]:
             if expected and sha256_file(path) != expected:
                 raise AssetValidationError(f"SHA-256 mismatch for {name}: {path}")
 
-    policy = _load_json(assets.gca_policy)
-    if policy.get("mode") != "gca" or not policy.get("per_rule_gate", False):
-        raise AssetValidationError("canonical policy must enable global per-rule GCA gating")
+    policy = _load_json(assets.conditional_policy)
+    if policy.get("mode") != "conditional" or not policy.get("per_rule_gate", False):
+        raise AssetValidationError("canonical policy must enable per-rule Conditional Attention gating")
     if (policy.get("meta") or {}).get("formula") != "exp_neg_lambda_i":
         raise AssetValidationError("canonical policy must declare exp(-lambda*I) weighting")
 

@@ -6,7 +6,7 @@ Pipeline
 2. Map onto LibCST node spans → mean score per node
 3. Within-file percentile bands: H / M / L
 
-Keys are ``(kind, start, end)`` so scores survive a second parse in Pass A.
+Keys are ``(kind, start, end)`` so scores survive a second parse in normalization.
 """
 
 from __future__ import annotations
@@ -171,7 +171,7 @@ def get_hotzones(
     max_length: int = 512,
     top_pct: float = 0.20,
 ) -> set[int]:
-    """EXPERIMENTAL: GCA 2.0 hotzone detection."""
+    """EXPERIMENTAL: Conditional Attention 2.0 hotzone detection."""
     import torch
     inputs = tokenizer(source, return_tensors="pt", truncation=True, max_length=max_length, return_offsets_mapping=True).to(device)
     with torch.no_grad():

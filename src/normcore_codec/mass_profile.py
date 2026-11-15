@@ -4,7 +4,7 @@ Categories (each source character → one bucket; each GPT-4 token → majority
 bucket over its char span):
 
   L_str / L_cmt / L_num   literal walls
-  K_kw / K_op / D_delim   syntax glue (Pass A surface)
+  K_kw / K_op / D_delim   syntax glue (normalization surface)
   S_sig / S_import / S_call / S_assign / S_ctrl   structural payload
   I_name                  leftover identifiers
   X_other                 whitespace / uncategorized
@@ -38,7 +38,7 @@ BUCKETS = (
     "X_other",
 )
 
-# tokenize OP strings treated as delimiters (Pass A comma/paren surface)
+# tokenize OP strings treated as delimiters (normalization comma/paren surface)
 _DELIMS = frozenset({"(", ")", "[", "]", "{", "}", ",", ":", ".", ";", "...", "@"})
 
 

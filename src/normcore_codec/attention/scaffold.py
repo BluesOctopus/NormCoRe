@@ -76,7 +76,7 @@ def get_attention_hotzones(
 
     return enhanced
 
-class GCAScaffold:
+class ConditionalScaffold:
     def __init__(self, source_hotzones: Set[int], source_len: int):
         self.hotzones = source_hotzones
         self.source_len = source_len
