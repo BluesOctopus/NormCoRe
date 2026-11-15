@@ -1,0 +1,41 @@
+% !TeX root = ../main.tex
+
+\section{Introduction}\label{sec:intro}
+
+
+Large language models (LLMs) have become increasingly important for software engineering tasks, including code generation, code completion, test generation, and program repair~\cite{chen2021codex,liu2023repobench,lemieux2023codamosa,jimenez2024swebench}. These workloads increasingly require models to process source code at function, repository, and issue level~\cite{liu2023repobench,jimenez2024swebench}. Therefore, token consumption has become a practical concern, directly affecting inference cost, context utilization, and the amount of code that can be processed within a single interaction. Since LLMs operate on tokenized sequences, reducing the usage of tokens required for code representation can therefore improve both the cost-effectiveness and scalability of code-centered LLM applications.
+
+However, programming languages were designed primarily for human developers rather than language models. Source code contains substantial syntactic and representational information that is useful for human comprehension but may be redundant for LLM processing. For example, indentation, delimiters, repeated keywords, verbose identifiers, and frequently recurring syntactic idioms can consume considerable token budgets without providing proportional semantic information. This observation motivates a fundamental question: \textit{Can source code be represented in a more compact form that preserves the information required by code language models while reducing token consumption?}
+
+
+
+Several recent studies have explored this direction by introducing alternative code representations or token-reduction techniques~\cite{simpy2024, tokensugar2024}. A common strategy is to define concise syntax rules that replace verbose source-code constructs with shorter representations~\cite{simpy2024}. Another strategy is to mine recurring code patterns and replace them with compact symbols (e.g., shorthand)~\cite{tokensugar2024}. Although frequency provides a natural criterion for identifying compressible patterns, it does not necessarily indicate whether compressing a pattern is beneficial to an LLM. A pattern may occur frequently but still be important for the model to explicitly observe in its original form. Consequently, applying compression solely according to syntactic heuristics or pattern frequency may reduce token consumption at the cost of downstream model performance.
+
+
+
+Therefore, we identify two challenges in token reduction. Challenge 1:
+How to identify and normalize systematic structural redundancies in code into a
+compact and recoverable representation? Challenge 2: How to identify
+recurring but contributive tokens?
+% We observe two recurring forms of redundancy in Python code. The first is structural information that can be recovered from the language grammar and decoding state, such as indentation, line organization, block boundaries, and selected delimiters. The second is repeated code idioms: multi-token expressions, calls, statements, and short blocks that share a stable structure while varying in identifiers, literals, or subexpressions. These two forms arise at different levels, but both can be represented more compactly without discarding the program-specific content needed to reconstruct executable code. This observation reveals a key tension in code representation: \textit{token efficiency and model utility are not necessarily aligned}. An effective representation should not simply minimize the number of tokens. It should selectively remove representational redundancy while preserving the information and patterns that a model relies on for understanding and generating code. Moreover, such a representation should remain reversible, because developers and software tools ultimately need to recover executable source code from the compressed representation. These requirements make code compression fundamentally different from conventional source-code minification: the objective is not merely to produce a shorter program, but to construct a compact representation that is both machine-effective and deterministically recoverable.}
+
+% Prior work demonstrates the feasibility of this direction.
+%  Lossy simplification methods instead remove elements considered less important~\cite{dietcode2022,slimcode2024,leancode2025}, which can be useful for code understanding but is harder to apply when the model must generate complete code that can be restored and executed. These studies establish that code can be shortened, but leave two connected questions: how should structural and idiomatic redundancy be organized within one reversible representation, and how should that representation account for the target model's existing knowledge?
+
+
+To address these challenges, we present \tool, a reversible code representation designed for code language models. \tool provides a unified \textit{Normalization \& Hybrid Idioms Shorthanding} and \textit{Conditional Attention} for deciding whether an eligible shorthand occurrence should actually be compressed. Specifically, \textit{Normalization} leverages Python grammar and decoder state to identify representational elements whose original forms can be reconstructed without ambiguity. On top of the normalized representation, \tool introduces \textit{Hybrid Idioms Shorthanding} to capture recurring code idioms at multiple granularities. Rather than restricting compression to individual tokens or fixed syntactic constructs, it mines recurring patterns from the normalized code surface and represents them using compact symbols and typed captures. Besides, Conditional Attention uses an offline model-derived signal to estimate the suitability of compression at individual occurrences. It then selectively materializes the shorthand only when the occurrence satisfies the compression condition.
+
+
+We evaluate \tool from three complementary perspectives. First, we measure its compression effectiveness and examine how many tokens can be eliminated across different configurations. \tool achieves up to 26.44\% token reduction among the evaluated modern code tokenizers. Second, we investigate whether the compressed representation remains useful to code language models. Our downstream experiments evaluate whether models can learn, generate, and use the \tool dialect, and compare their performance against the original Python surface. The results show that models operating on \tool can retain performance close to that obtained with the original representation despite substantially reduced token consumption. Third, we conduct ablation and sensitivity studies to understand the contributions of Normalization, Hybrid Idioms Shorthanding, and Conditional Attention, as well as the impact of key parameter choices.
+
+
+In summary, we make the following contributions:
+
+
+
+\begin{itemize}[leftmargin=*]
+    \item We present \tool, a reversible code representation that reduces the token overhead of Python code while preserving deterministic recovery to the original source representation.
+    \item We propose a unified \textit{Normalization \& Hybrid Idioms Shorthanding} framework that combines grammar-aware normalization with multi-granularity idiom compression using compact symbols and typed captures.
+    \item We introduce \textit{Conditional Attention}, a model-aware compression mechanism that selectively applies shorthand based on an offline model-derived signal rather than frequency alone.
+    \item We conduct extensive experiments demonstrating the token-reduction capability, downstream model compatibility, and component effectiveness of \tool, achieving up to 26.44\% token reduction among the evaluated modern code tokenizers while retaining downstream performance close to the original Python surface.
+\end{itemize}

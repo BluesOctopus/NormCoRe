@@ -1,0 +1,45 @@
+\begin{table*}[!t]
+    \centering
+    \scriptsize
+    \setlength{\tabcolsep}{3.2pt}
+    \renewcommand{\arraystretch}{1.08}
+    \caption{RQ1 comparison on the same held-out inputs and tokenizers. $\mathrm{Tok}_b$ and $\mathrm{Tok}_a$ are the aggregate token counts before and after encoding, and ``Redu.'' is $100(1-\mathrm{Tok}_a/\mathrm{Tok}_b)$.}
+    \vspace{-5pt}
+    \label{tab:rq1_final}
+    \resizebox{\textwidth}{!}{%
+    \begin{tabular}{@{}llrrr|rrr|rrr@{}}
+    \toprule
+    \multirow{2}{*}{\textbf{Tokenizer}} & \multirow{2}{*}{\textbf{Methods}} &
+    \multicolumn{3}{c|}{\textbf{CodeSearchNet}} &
+    \multicolumn{3}{c|}{\textbf{StarCoder Python}} &
+    \multicolumn{3}{c}{\textbf{LeetCode}} \\
+    \cmidrule(lr){3-5}\cmidrule(lr){6-8}\cmidrule(lr){9-11}
+    & & $\mathrm{Tok}_b$\,(\#) & $\mathrm{Tok}_a$\,(\#) & \textbf{Redu. (\%)} &
+    $\mathrm{Tok}_b$\,(\#) & $\mathrm{Tok}_a$\,(\#) & \textbf{Redu. (\%)} &
+    $\mathrm{Tok}_b$\,(\#) & $\mathrm{Tok}_a$\,(\#) & \textbf{Redu. (\%)} \\
+    \midrule
+    \multirow{3}{*}{Qwen2.5-Coder-1.5B tokenizer} & SimPy & 5,101,204 & 4,721,077 & 7.45 & 2,300,617 & 2,137,651 & 7.08 & 106,057 & 92,442 & 12.84 \\
+    & TokenSugar (encoder-only) & 5,101,204 & 4,926,571 & 3.42 & 2,300,617 & 2,217,043 & 3.63 & 106,057 & 91,244 & 13.97 \\
+    & \tool & 5,101,204 & 4,663,022 & \textbf{8.59} & 2,300,617 & 2,054,298 & \textbf{10.71} & 106,057 & 83,669 & \textbf{21.11} \\
+    \midrule
+    \multirow{3}{*}{DeepSeek-Coder-1.3B tokenizer} & SimPy & 6,630,345 & 5,973,337 & 9.91 & 3,111,613 & 2,808,201 & 9.75 & 131,203 & 111,822 & 14.77 \\
+    & TokenSugar (encoder-only) & 6,630,345 & 6,343,469 & 4.33 & 3,111,613 & 2,963,039 & 4.77 & 131,203 & 109,113 & 16.84 \\
+    & \tool & 6,630,345 & 5,890,688 & \textbf{11.16} & 3,111,613 & 2,671,988 & \textbf{14.13} & 131,203 & 99,452 & \textbf{24.20} \\
+    \midrule
+    \multirow{3}{*}{StarCoder2-3B tokenizer} & SimPy & 5,669,855 & 5,355,839 & 5.54 & 2,647,751 & 2,490,505 & 5.94 & 113,369 & 102,998 & 9.15 \\
+    & TokenSugar (encoder-only) & 5,669,855 & 5,406,855 & 4.64 & 2,647,751 & 2,511,790 & 5.13 & 113,369 & 92,716 & 18.22 \\
+    & \tool & 5,669,855 & 5,297,066 & \textbf{6.57} & 2,647,751 & 2,400,096 & \textbf{9.35} & 113,369 & 91,682 & \textbf{19.13} \\
+    \midrule
+    \multirow{3}{*}{Mistral-7B tokenizer} & SimPy & 6,617,359 & 5,864,099 & 11.38 & 3,079,987 & 2,750,136 & 10.71 & 133,470 & 110,887 & 16.92 \\
+    & TokenSugar (encoder-only) & 6,617,359 & 6,351,460 & 4.02 & 3,079,987 & 2,948,384 & 4.27 & 133,470 & 113,066 & 15.29 \\
+    & \tool & 6,617,359 & 5,783,761 & \textbf{12.60} & 3,079,987 & 2,609,683 & \textbf{15.27} & 133,470 & 98,180 & \textbf{26.44} \\
+    \midrule
+    \multirow{3}{*}{GPT-2 tokenizer} & SimPy & 10,390,406 & 6,795,142 & 34.60 & 4,461,471 & 3,257,371 & 26.99 & 231,670 & 121,869 & 47.40 \\
+    & TokenSugar (encoder-only) & 10,390,406 & 10,064,529 & 3.14 & 4,461,471 & 4,285,199 & 3.95 & 231,670 & 205,822 & 11.16 \\
+    & \tool & 10,390,406 & 6,638,218 & \textbf{36.11} & 4,461,471 & 2,898,884 & \textbf{35.02} & 231,670 & 109,057 & \textbf{52.93} \\
+    \bottomrule
+    \end{tabular}%
+    }
+    \vspace{2pt}
+    \parbox{0.98\textwidth}{\footnotesize All methods are evaluated on the same held-out files with the tokenizer specified by each row. Each dialect symbol counts as one token. SimPy and \tool report strict round-trip reductions, while TokenSugar follows its encoder-side counting protocol. Bold marks the largest reduction in each tokenizer--corpus group.}
+\end{table*}

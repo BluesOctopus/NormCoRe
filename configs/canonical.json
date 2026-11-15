@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "method": "RECODE Pass A + Pass B with GCA",
+  "pass_a": {
+    "mode": "gca",
+    "per_rule_gate": true,
+    "spine_always_on": true
+  },
+  "attention": {
+    "scores_path": "assets/attention_scores.json",
+    "protect_threshold": 0.0008,
+    "tiers": {
+      "enabled": true,
+      "high_threshold": 0.0008,
+      "low_threshold": 0.00035,
+      "low_unlock_default_off": false
+    },
+    "pass_a": {
+      "per_rule_gate": true
+    },
+    "pass_b": {
+      "formula": "exp_neg_lambda_i",
+      "lambda": 2.0,
+      "hard_protect": false,
+      "rank_by": "selection_utility",
+      "top_k": 300
+    }
+  },
+  "reversibility_contract": "AST-equivalent on accepted Python inputs"
+}

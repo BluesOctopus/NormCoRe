@@ -1,0 +1,43 @@
+% !TeX root = ../main.tex
+
+\section{Experiments}
+\label{sec:experiments}
+
+We design the following research questions:
+
+\begin{itemize}[leftmargin=*]
+    \item \textbf{RQ1: Compression capability.} How much can \tool reduce token usage across Python corpora and tokenizers, and how do Normalization and Hybrid Idioms Shorthanding contribute to the gain?
+    \item \textbf{RQ2: Dialect learnability and downstream use.} Can a code model learn and use the \tool dialect while retaining its capability on downstream software-engineering tasks?
+    \item \textbf{RQ3: Conditional Attention.} At a comparable reduction level, can model-informed occurrence selection reduce the representation shift and adaptation cost introduced by Hybrid Idioms Shorthanding?
+    \item \textbf{RQ4: Parameter sensitivity.} How sensitive is compression to the registry capacity and mining bounds, and which settings provide the best held-out operating point?
+\end{itemize}
+
+\subsection{Experimental Setup}
+\label{subsec:data_setup}
+
+We choose each corpus for a specific experimental role. CodeSearchNet (CSN) is collected from public GitHub repositories and covers diverse projects, APIs, and coding styles, making it suitable for testing compression on heterogeneous repository code~\cite{husain2019codesearchnet}. We use the Python subset of StarCoderData as the source of the continual-pretraining corpus in RQ2~\cite{starcoder2023,zhensuuu2024starcoderdata}. LeetCode contains compact function-level solutions with recurring algorithmic idioms; we use the publicly released \path{LeetCode_Python_Solutions_v2} collection for pattern mining~\cite{limyeri2024leetcode}. CodeContests provides problem-grouped solutions with many eligible pattern occurrences, enabling the controlled occurrence-level selection and problem-disjoint evaluation in RQ3~\cite{codecontests2022}. HumanEval is kept strictly for downstream evaluation because it is a widely used code-generation benchmark with function signatures, natural-language specifications, and executable tests for measuring functional correctness~\cite{chen2021codex}.
+
+For RQ1, each corpus--tokenizer pair has a mining split and a disjoint evaluation split. Registries are mined independently for each pair, so RQ1 measures codec capacity under the corresponding tokenization and repetition distribution rather than the performance of one universal vocabulary. For RQ2, original-Python and \tool corpora are constructed from the same source documents, and one fixed multidomain registry is shared by all dialect samples. The same adapted checkpoint is used for code generation, completion, and test generation. For RQ3, we use a frozen candidate registry derived from CodeContests training problems. The Conditional Attention scorer is calibrated without access to the held-out problem groups and is compared with random occurrence selection at matched reduction levels. No evaluation benchmark is used for mining, calibration, or training.
+
+Before materialization, sources are parsed, de-duplicated, and split by repository, or by problem for solution data. We remove overlap with held-out benchmarks and record the splits and codec configuration in reproducible manifests. Every dialect target is decoded and checked for executable, AST-equivalent recovery before use.
+
+\subsection{Metrics and Evaluation Protocol}
+\label{subsec:metrics}
+
+All token counts use the same tokenizer before and after compression. For native token count $N$ and compressed wire count $C$, reduction is $1-C/N$. For RQ1 we report the aggregate ratio over a complete evaluation split, rather than the arithmetic mean of per-file percentages. The contributions of Normalization and Hybrid Idioms Shorthanding use the same native denominator. Structural and idiom symbols are counted as atomic special tokens, and capture parameters are included in the compressed representation.
+
+For downstream tasks, we report Pass@1 and the realized reduction in model-facing tokens. In the symmetric dialect condition, the model receives and generates dialect code, and generated output is restored before execution. Compilation and strict restoration rates verify that the generated dialect remains usable. RQ3 measures local representation shift by the change in suffix negative log-likelihood (delta-NLL). It measures adaptation cost with validation NLL, perplexity, learning curves, and the number of steps required to reach a fixed loss threshold. In the RQ3 tables, ``Reduction (\%)'' is the fraction of all available candidate savings selected for a comparison, whereas ``Tokens removed'' is the corresponding absolute number of tokens; they describe the same reduction at relative and absolute scales.
+
+\subsection{Model and Training Configuration}
+\label{sec:setup}
+
+RQ1 measures token counts with the tokenizers distributed with five exact checkpoints: Qwen2.5-Coder-1.5B~\cite{qwen2024}, DeepSeek-Coder-1.3B~\cite{deepseekcoder2024}, StarCoder2-3B~\cite{starcoder2_2024}, Mistral-7B~\cite{mistral2023}, and GPT-2~\cite{radford2019gpt2}. These names identify the tokenizer source; RQ1 does not run model inference.
+
+The RQ2 dialect-absorption experiment uses Qwen2.5-Coder-1.5B as the
+mainline backbone~\cite{qwen2024} and repeats the matched Baseline/\tool evaluation on
+StarCoder2-3B~\cite{starcoder2_2024}, Mistral-7B~\cite{mistral2023}, and GPT-2~\cite{radford2019gpt2}. Each backbone uses a
+LoRA parameter-efficient adapter~\cite{hu2022lora}, a fixed \tool vocabulary, matched source data,
+and the same evaluation protocols for its two conditions. The Baseline condition uses the original Python surface; the \tool condition uses the calibrated dialect. All models are evaluated
+on code generation, code completion, and reference-accepting test generation.
+
+The RQ3 comparison uses the same backbone, tokenizer, codec, candidate registry, shared initialization, packed-data size, and optimizer configuration for both policies. Each policy is trained for 100 steps with sequence length 1024 and effective batch size 32. The only experimental variable is whether eligible shorthand occurrences are selected by Conditional Attention or by a reduction-matched random policy. Results are repeated across three training runs, while the occurrence-level test uses problem-disjoint calibration and evaluation splits.

@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "method_contract": "docs/METHOD_CONTRACT.md",
+  "provenance_status": {
+    "attention_model_hash": "unresolved",
+    "sample_ids": "unresolved",
+    "aggregation": "layers-heads-query mean; category span mean"
+  },
+  "files": {
+    "pattern_registry": {
+      "path": "assets/registry_canonical.json",
+      "sha256": "5ce75fdbdd24e87b4bddd1be5482bf4ff86d5afef4a69c38d87912a218d72c8c"
+    },
+    "gca_policy": {
+      "path": "assets/policy_canonical.json",
+      "sha256": "de4d5ad130fb69154636e2d74cd50c0395083b6abb5aadd2710a7f2a29b029b5"
+    },
+    "type_table": {
+      "path": "assets/type_specials.json",
+      "sha256": "84d4f6dd05df132362a63b58f7055d8c2cc43c2adb86f82c2c11435c4cfd8ba9"
+    },
+    "grammar_binary": {
+      "path": "assets/spy_lang.so",
+      "sha256": "032717e09f074a8280e4dbf81165d88c35eecbda41dd195eda2367ccea2cf715"
+    },
+    "attention_scores": {
+      "path": "assets/attention_scores.json",
+      "sha256": "a7203747e236946686d38866d2e3b765947104dc87b3000883d6bf55154ff3db"
+    },
+    "registry_base": {
+      "path": "assets/registry_base.json",
+      "sha256": "d1df39aaada51e7a9a5f33ee807ee0f14e6f18500a1d45e30345450616dae951"
+    },
+    "aggressive_registry": {
+      "path": "assets/registry_aggressive_safe.json",
+      "sha256": "0e62735f43ef1c42c859dcc7299b6ab3d95c8f7f82f82454c492adc18728f60b"
+    }
+  }
+}

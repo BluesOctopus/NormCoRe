@@ -1,0 +1,236 @@
+{
+  "types": [
+    {
+      "id": "<t_66717393>",
+      "type": "Optional[pulumi.Input[str]]",
+      "freq": 57,
+      "n_tok": 6,
+      "saved_est": 285
+    },
+    {
+      "id": "<t_66712968>",
+      "type": "Optional[pulumi.Input[Mapping[str,pulumi.Input[str]]]]",
+      "freq": 9,
+      "n_tok": 13,
+      "saved_est": 108
+    },
+    {
+      "id": "<t_64ea37aa>",
+      "type": "dict[int,Sensor]",
+      "freq": 12,
+      "n_tok": 5,
+      "saved_est": 48
+    },
+    {
+      "id": "<t_eba40a00>",
+      "type": "Optional[str]",
+      "freq": 23,
+      "n_tok": 3,
+      "saved_est": 46
+    },
+    {
+      "id": "<t_a6688aa0>",
+      "type": "Optional[pulumi.Input[int]]",
+      "freq": 6,
+      "n_tok": 6,
+      "saved_est": 30
+    },
+    {
+      "id": "<t_b43a25a8>",
+      "type": "Optional[pulumi.Input['_meta.v1.ObjectMetaArgs']]",
+      "freq": 3,
+      "n_tok": 11,
+      "saved_est": 30
+    },
+    {
+      "id": "<t_241c74f9>",
+      "type": "Optional[pulumi.Input['LeaseSpecArgs']]",
+      "freq": 3,
+      "n_tok": 10,
+      "saved_est": 27
+    },
+    {
+      "id": "<t_75a23d58>",
+      "type": "Optional[bool]",
+      "freq": 7,
+      "n_tok": 4,
+      "saved_est": 21
+    },
+    {
+      "id": "<t_0d475e6f>",
+      "type": "Optional[pulumi.ResourceOptions]",
+      "freq": 4,
+      "n_tok": 6,
+      "saved_est": 20
+    },
+    {
+      "id": "<t_fee3974f>",
+      "type": "Iterable[Address]",
+      "freq": 5,
+      "n_tok": 4,
+      "saved_est": 15
+    },
+    {
+      "id": "<t_de1bb026>",
+      "type": "Optional[List[str]]",
+      "freq": 5,
+      "n_tok": 4,
+      "saved_est": 15
+    },
+    {
+      "id": "<t_cb8a63f3>",
+      "type": "Dict[str,torch.Tensor]",
+      "freq": 3,
+      "n_tok": 6,
+      "saved_est": 15
+    },
+    {
+      "id": "<t_d8aa3c49>",
+      "type": "Tuple[np.ndarray,np.ndarray]",
+      "freq": 3,
+      "n_tok": 6,
+      "saved_est": 15
+    },
+    {
+      "id": "<t_609db226>",
+      "type": "List[List[Union[str,float]]]",
+      "freq": 2,
+      "n_tok": 8,
+      "saved_est": 14
+    },
+    {
+      "id": "<t_4bde2c62>",
+      "type": "Dict[str,Any]",
+      "freq": 3,
+      "n_tok": 5,
+      "saved_est": 12
+    },
+    {
+      "id": "<t_74007250>",
+      "type": "Tuple[int,int,int]",
+      "freq": 3,
+      "n_tok": 5,
+      "saved_est": 12
+    },
+    {
+      "id": "<t_6a911e61>",
+      "type": "Optional[List['ProviderOperation']]",
+      "freq": 2,
+      "n_tok": 6,
+      "saved_est": 10
+    },
+    {
+      "id": "<t_9c588697>",
+      "type": "List[str]",
+      "freq": 4,
+      "n_tok": 3,
+      "saved_est": 8
+    },
+    {
+      "id": "<t_04d27b31>",
+      "type": "List[int]",
+      "freq": 4,
+      "n_tok": 3,
+      "saved_est": 8
+    },
+    {
+      "id": "<t_5e40dd87>",
+      "type": "Optional[List['Permission']]",
+      "freq": 2,
+      "n_tok": 5,
+      "saved_est": 8
+    },
+    {
+      "id": "<t_4a5844d9>",
+      "type": "list[Device]",
+      "freq": 2,
+      "n_tok": 4,
+      "saved_est": 6
+    },
+    {
+      "id": "<t_54d79a92>",
+      "type": "List[float]",
+      "freq": 0,
+      "seed": true
+    },
+    {
+      "id": "<t_4e5db00c>",
+      "type": "List[Any]",
+      "freq": 0,
+      "seed": true
+    },
+    {
+      "id": "<t_8ceda675>",
+      "type": "Dict[str,str]",
+      "freq": 0,
+      "seed": true
+    },
+    {
+      "id": "<t_7fcad106>",
+      "type": "Dict[str,int]",
+      "freq": 0,
+      "seed": true
+    },
+    {
+      "id": "<t_7216ebaa>",
+      "type": "Optional[int]",
+      "freq": 0,
+      "seed": true
+    },
+    {
+      "id": "<t_86c0a7a1>",
+      "type": "Tuple[int,int]",
+      "freq": 0,
+      "seed": true
+    },
+    {
+      "id": "<t_bbbc41bb>",
+      "type": "Tuple[str,str]",
+      "freq": 0,
+      "seed": true
+    },
+    {
+      "id": "<t_ffb8d60e>",
+      "type": "Tuple[float,float]",
+      "freq": 0,
+      "seed": true
+    },
+    {
+      "id": "<t_96851287>",
+      "type": "Set[str]",
+      "freq": 0,
+      "seed": true
+    },
+    {
+      "id": "<t_4ff0a9bb>",
+      "type": "Set[int]",
+      "freq": 0,
+      "seed": true
+    },
+    {
+      "id": "<t_d811461d>",
+      "type": "Union[str,int]",
+      "freq": 0,
+      "seed": true
+    },
+    {
+      "id": "<t_45cd8af0>",
+      "type": "Callable[...,Any]",
+      "freq": 0,
+      "seed": true
+    },
+    {
+      "id": "<t_c49a3c18>",
+      "type": "Iterable[str]",
+      "freq": 0,
+      "seed": true
+    },
+    {
+      "id": "<t_a2534fe0>",
+      "type": "Sequence[int]",
+      "freq": 0,
+      "seed": true
+    }
+  ],
+  "scheme": "S1"
+}

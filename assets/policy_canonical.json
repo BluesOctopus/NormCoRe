@@ -1,0 +1,136 @@
+{
+  "mode": "gca",
+  "protected": [
+    "class_def",
+    "import"
+  ],
+  "threshold": 0.0008,
+  "scores_path": "assets/attention_scores.json",
+  "scores": {
+    "import": 0.00840829008169541,
+    "class_def": 0.000808301176993182,
+    "function_def": 0.0004008971683490732,
+    "expr": 0.0003068009630049449,
+    "assign": 0.0003531076286857162,
+    "loop": 0.0002787667631462837,
+    "if_stmt": 0.0002799522959216836
+  },
+  "per_rule_gate": true,
+  "tiers": {
+    "enabled": true,
+    "high_threshold": 0.0008,
+    "low_threshold": 0.00035,
+    "band_sets": {
+      "H": [
+        "class_def",
+        "import"
+      ],
+      "M": [
+        "assign",
+        "function_def"
+      ],
+      "L": [
+        "expr",
+        "if_stmt",
+        "loop"
+      ]
+    }
+  },
+  "pass_a_rules": {
+    "enabled_optional": [
+      "Assert",
+      "AugAssign",
+      "Await",
+      "BinaryOperation",
+      "BooleanOperation",
+      "Call",
+      "CompFor",
+      "Comparison",
+      "ConcatenatedString",
+      "Del",
+      "Dict",
+      "Ellipsis",
+      "Else",
+      "Global",
+      "IfExp",
+      "Lambda",
+      "List",
+      "Name",
+      "Nonlocal",
+      "Parameters",
+      "Set",
+      "Subscript",
+      "Tuple",
+      "UnaryOperation",
+      "Yield"
+    ],
+    "disabled_optional": [
+      "ImportFrom",
+      "type_pack"
+    ],
+    "n_enabled_optional": 25,
+    "n_disabled_optional": 2,
+    "type_pack": false
+  },
+  "meta": {
+    "pass_a_cfg": {
+      "per_rule_gate": true
+    },
+    "tiers": {
+      "enabled": true,
+      "high_threshold": 0.0008,
+      "low_threshold": 0.00035,
+      "bands": {
+        "import": "H",
+        "class_def": "H",
+        "function_def": "M",
+        "expr": "L",
+        "assign": "M",
+        "loop": "L",
+        "if_stmt": "L"
+      },
+      "band_sets": {
+        "H": [
+          "class_def",
+          "import"
+        ],
+        "M": [
+          "assign",
+          "function_def"
+        ],
+        "L": [
+          "expr",
+          "if_stmt",
+          "loop"
+        ]
+      },
+      "low_unlock_default_off": false,
+      "pass_b_l_mode": "boost",
+      "pass_b_boost_beta": 1.0
+    },
+    "pass_a_rule_counts": {
+      "base": 28,
+      "optional": 27,
+      "optional_transform": 26,
+      "optional_post": 1,
+      "transform_total": 54,
+      "gateable_total": 27
+    },
+    "pass_a_optional_gate": {
+      "n_enabled": 25,
+      "n_disabled": 2,
+      "disabled": [
+        "ImportFrom",
+        "type_pack"
+      ],
+      "enabled_post": [],
+      "disabled_post": [
+        "type_pack"
+      ]
+    },
+    "catalog_coverage": [],
+    "pass_b_reweight": true,
+    "formula": "exp_neg_lambda_i",
+    "lambda": 2.0
+  }
+}

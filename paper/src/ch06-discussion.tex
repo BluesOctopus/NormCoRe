@@ -1,0 +1,11 @@
+\section{Discussion}
+
+\subsection{What the Results Establish}
+
+The experiments separate three properties that are often conflated in compact code representations. First, the representation has measurable compression capacity: Normalization removes recoverable layout and structural redundancy, while Hybrid Idioms Shorthanding adds corpus- and tokenizer-dependent savings on the normalized surface. Second, a model can learn the resulting dialect and use it in generation, completion, and test generation while remaining close to its Baseline condition on original Python. Third, reversible recovery does not imply that every compact representation is equally easy for a model to learn, which motivates model-informed occurrence selection.
+
+RQ3 evaluates this selection view at matched reduction levels. On held-out occurrences, Conditional Attention changes cumulative suffix NLL by $-5.03$, compared with $+2.65$ for matched random selection. Across three adaptation runs, it remains below Random throughout training, reaches NLL below 1.0 by step 30, and finishes at 0.9696 rather than 1.0094. The signal is computed before materializing the dialect, so it does not modify the model's autoregressive generation loop.
+
+\subsection{Domain and Tokenizer Dependence}
+
+Hybrid Idioms Shorthanding is data-driven, so its gain follows the repetition structure of the target corpus and the token boundaries of the chosen tokenizer. LeetCode contains compact, repeated algorithmic idioms and therefore yields larger shorthand gains than the more heterogeneous CSN and StarCoder Python corpora. The positive gains on all three corpora show that idiom collection can absorb residual patterns across both function-level and repository-level code while adapting its registry to the target distribution.

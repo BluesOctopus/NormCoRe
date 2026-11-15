@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "normcore-codec"
+version = "1.0.0"
+description = "NormCoRe reversible code representation and token-reduction codec"
+requires-python = ">=3.10"
+dependencies = [
+  "libcst",
+  "regex",
+  "tree-sitter>=0.20.2",
+  "tiktoken"
+]
+
+[project.optional-dependencies]
+test = ["pytest"]
+eval = ["tiktoken"]
+profile = ["numpy", "torch", "transformers"]
+
+[project.scripts]
+normcore-codec = "recode_codec.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
