@@ -3,8 +3,8 @@ from __future__ import annotations
 
 import pytest
 
-from recode_codec import CodecAssets, CodecConfig, PassAConfig, PassBConfig, compress
-from recode_codec.dynamic import PatternEntry, apply_dynamic_pass
+from normcore_codec import CodecAssets, CodecConfig, PassAConfig, PassBConfig, compress
+from normcore_codec.dynamic import PatternEntry, apply_dynamic_pass
 
 from pathlib import Path
 

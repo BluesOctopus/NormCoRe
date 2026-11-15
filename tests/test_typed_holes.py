@@ -6,12 +6,12 @@ import json
 
 import pytest
 
-from recode_codec import CodecAssets, CodecConfig, PassAConfig, PassBConfig, compress
-from recode_codec.assets import AssetValidationError, validate_registry
-from recode_codec.dynamic import apply_dynamic_pass, invert_dynamic_pass, load_registry
-from recode_codec.mask import count_literal_placeholders, mask_literals, unmask_literals
-from recode_codec.markers import PATTERN_END
-from recode_codec.pipeline import PlaceholderLeak
+from normcore_codec import CodecAssets, CodecConfig, PassAConfig, PassBConfig, compress
+from normcore_codec.assets import AssetValidationError, validate_registry
+from normcore_codec.dynamic import apply_dynamic_pass, invert_dynamic_pass, load_registry
+from normcore_codec.mask import count_literal_placeholders, mask_literals, unmask_literals
+from normcore_codec.markers import PATTERN_END
+from normcore_codec.pipeline import PlaceholderLeak
 
 
 def write_registry(tmp_path, rows, name="registry.json"):

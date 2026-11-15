@@ -63,7 +63,7 @@ def choose_to_saving(rows: list[dict], score, target: int) -> set[tuple]:
 def make_codec(args: argparse.Namespace):
     sys.path.insert(0, str(args.core / "code/recode_method/src"))
     sys.path.insert(0, str(args.core / "code/recode_experiments/src"))
-    from recode_codec import CodecAssets, CodecConfig, PassAConfig, PassBConfig
+    from normcore_codec import CodecAssets, CodecConfig, PassAConfig, PassBConfig
     from recode_experiments.codec import aggressive_assets
 
     base = aggressive_assets()
@@ -99,7 +99,7 @@ def main() -> None:
     )
     count = lambda text: len(tokenizer(text, add_special_tokens=False).input_ids)
     assets, pass_a_config, pass_ab_config = make_codec(args)
-    from recode_codec import compress, decompress
+    from normcore_codec import compress, decompress
 
     documents = [json.loads(line) for line in args.documents.open(encoding="utf-8")]
     if args.max_documents is not None:

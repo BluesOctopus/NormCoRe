@@ -4,8 +4,8 @@ from __future__ import annotations
 import ast
 from pathlib import Path
 
-from recode_codec import CodecAssets, CodecConfig, PassAConfig, PassBConfig, compress, restore
-from recode_codec.gca_stmt import collect_statements
+from normcore_codec import CodecAssets, CodecConfig, PassAConfig, PassBConfig, compress, restore
+from normcore_codec.gca_stmt import collect_statements
 
 ASSETS = CodecAssets.from_root(Path(__file__).resolve().parents[1] / "assets")
 CFG = CodecConfig(

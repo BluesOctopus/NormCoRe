@@ -7,13 +7,13 @@ import json
 from datetime import datetime, timezone
 from pathlib import Path
 
-from recode_codec.assets import sha256_file
+from normcore_codec.assets import sha256_file
 
 
 def main() -> None:
     root = Path(__file__).resolve().parents[1]
     core = root.parents[1]
-    source_files = sorted((root / "src/recode_codec").rglob("*"))
+    source_files = sorted((root / "src/normcore_codec").rglob("*"))
     tracked = [
         path
         for path in source_files
@@ -34,7 +34,7 @@ def main() -> None:
         "schema_version": 1,
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "canonical_root": str(root),
-        "python_package": "recode_codec",
+        "python_package": "normcore_codec",
         "method_contract": "code/recode_method/docs/METHOD_CONTRACT.md",
         "active_experiments": "code/recode_experiments",
         "source_baseline": (

@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pytest
 
-from recode_codec import (
+from normcore_codec import (
     CodecAssets,
     CodecConfig,
     PassAConfig,
@@ -90,7 +90,7 @@ def test_pipeline_forwards_explicit_pass_b_count_fn(monkeypatch):
         out, stats = fake_dynamic(text, registry, **kwargs)
         return out, stats, {"skipped": "disabled"}
 
-    monkeypatch.setattr("recode_codec.pipeline.apply_pass_b", fake_pass_b)
+    monkeypatch.setattr("normcore_codec.pipeline.apply_pass_b", fake_pass_b)
     count_fn = lambda value: len(value)
     result = compress(
         "def f():\n    return 1\n",

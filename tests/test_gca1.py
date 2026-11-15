@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pytest
 
-from recode_codec import CodecAssets, CodecConfig, PassAConfig, PassBConfig, compress, restore
+from normcore_codec import CodecAssets, CodecConfig, PassAConfig, PassBConfig, compress, restore
 
 ASSETS = CodecAssets.from_root(Path(__file__).resolve().parents[1] / "assets")
 CFG = CodecConfig(
@@ -57,7 +57,7 @@ class A:
 
 
 def test_collect_functions_byte_spans_include_class_methods():
-    from recode_codec.gca1 import collect_functions
+    from normcore_codec.gca1 import collect_functions
 
     funcs = collect_functions(CLASS_SRC)
     assert len(funcs) == 2

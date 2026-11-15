@@ -1,4 +1,4 @@
-from recode_codec.dynamic.subtree import (
+from normcore_codec.dynamic.subtree import (
     SUBTREE_BIND,
     SUBTREE_END,
     apply_subtree_pass,

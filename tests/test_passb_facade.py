@@ -1,4 +1,4 @@
-from recode_codec.passb import apply_pass_b, invert_pass_b
+from normcore_codec.passb import apply_pass_b, invert_pass_b
 
 
 def test_pass_b_facade_preserves_stage_order(monkeypatch):
@@ -12,8 +12,8 @@ def test_pass_b_facade_preserves_stage_order(monkeypatch):
         calls.append(("subtree", text))
         return text + "S", {"subtree": True}
 
-    monkeypatch.setattr("recode_codec.passb.apply_dynamic_pass", fake_dynamic)
-    monkeypatch.setattr("recode_codec.passb.apply_subtree_pass", fake_subtree)
+    monkeypatch.setattr("normcore_codec.passb.apply_dynamic_pass", fake_dynamic)
+    monkeypatch.setattr("normcore_codec.passb.apply_subtree_pass", fake_subtree)
     out, dynamic_stats, subtree_stats = apply_pass_b(
         "source", "wire", [], count_fn=len, subtree_slots=8
     )
@@ -34,8 +34,8 @@ def test_pass_b_facade_inverts_in_reverse_order(monkeypatch):
         calls.append(("dynamic", text))
         return text.removesuffix("D")
 
-    monkeypatch.setattr("recode_codec.passb.invert_subtree_pass", fake_subtree)
-    monkeypatch.setattr("recode_codec.passb.invert_dynamic_pass", fake_dynamic)
+    monkeypatch.setattr("normcore_codec.passb.invert_subtree_pass", fake_subtree)
+    monkeypatch.setattr("normcore_codec.passb.invert_dynamic_pass", fake_dynamic)
     assert invert_pass_b("wireDS", []) == "wire"
     assert calls == [("subtree", "wireDS"), ("dynamic", "wireD")]
 
@@ -55,8 +55,8 @@ def test_pass_b_joint_best_of_selects_lowest_complete_wire(monkeypatch):
         "capture": 8,
         "plain": 10,
     }
-    monkeypatch.setattr("recode_codec.passb.apply_dynamic_pass", fake_dynamic)
-    monkeypatch.setattr("recode_codec.passb.apply_subtree_pass", fake_subtree)
+    monkeypatch.setattr("normcore_codec.passb.apply_dynamic_pass", fake_dynamic)
+    monkeypatch.setattr("normcore_codec.passb.apply_subtree_pass", fake_subtree)
     out, dynamic_stats, subtree_stats = apply_pass_b(
         "source",
         "wire",

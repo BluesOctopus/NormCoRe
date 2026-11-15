@@ -85,7 +85,7 @@ def load_model(args: argparse.Namespace, tokenizer):
 def codec(args: argparse.Namespace):
     sys.path.insert(0, str(args.core / "code/recode_method/src"))
     sys.path.insert(0, str(args.core / "code/recode_experiments/src"))
-    from recode_codec import CodecAssets, CodecConfig, PassAConfig, PassBConfig
+    from normcore_codec import CodecAssets, CodecConfig, PassAConfig, PassBConfig
     from recode_experiments.codec import aggressive_assets
 
     base = aggressive_assets()
@@ -246,7 +246,7 @@ def main() -> None:
 
     model = load_model(args, tokenizer)
     assets, pass_a, pass_ab = codec(args)
-    from recode_codec import compress
+    from normcore_codec import compress
 
     count = lambda value: len(tokenizer(value, add_special_tokens=False).input_ids)
     documents = load_documents(args.documents, args.max_documents)

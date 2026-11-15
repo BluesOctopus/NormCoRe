@@ -6,16 +6,16 @@ from pathlib import Path
 
 import pytest
 
-from recode_codec.assets import AssetValidationError, validate_assets, validate_registry
-from recode_codec.attention.gca import load_policy
-from recode_codec.attention.weight import exponential_reward
-from recode_codec.config import CodecAssets
-from recode_codec.dynamic import PatternEntry, _dp_select, apply_dynamic_pass, invert_dynamic_pass
-from recode_codec.dynamic.wildcard import bare_goal_token
-from recode_codec.markers import all_special_tokens
-from recode_codec.structural.aggressive import idiom_special_tokens
-from recode_codec.structural.type_pack import load_type_table
-from recode_codec.tokens import get_count_fn
+from normcore_codec.assets import AssetValidationError, validate_assets, validate_registry
+from normcore_codec.attention.gca import load_policy
+from normcore_codec.attention.weight import exponential_reward
+from normcore_codec.config import CodecAssets
+from normcore_codec.dynamic import PatternEntry, _dp_select, apply_dynamic_pass, invert_dynamic_pass
+from normcore_codec.dynamic.wildcard import bare_goal_token
+from normcore_codec.markers import all_special_tokens
+from normcore_codec.structural.aggressive import idiom_special_tokens
+from normcore_codec.structural.type_pack import load_type_table
+from normcore_codec.tokens import get_count_fn
 
 ROOT = Path(__file__).resolve().parents[1]
 ASSETS = CodecAssets.from_root(ROOT / "assets")

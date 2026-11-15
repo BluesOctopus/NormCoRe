@@ -2,9 +2,9 @@
 
 from __future__ import annotations
 
-from recode_codec.mask import mask_literals
-from recode_codec.structural import apply_structural_pass
-from recode_codec.dynamic.miner import (
+from normcore_codec.mask import mask_literals
+from normcore_codec.structural import apply_structural_pass
+from normcore_codec.dynamic.miner import (
     generalize,
     iter_template_instances,
     split_dialect_units,

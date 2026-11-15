@@ -20,7 +20,7 @@ eval = ["tiktoken"]
 profile = ["numpy", "torch", "transformers"]
 
 [project.scripts]
-normcore-codec = "recode_codec.cli:main"
+normcore-codec = "normcore_codec.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

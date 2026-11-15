@@ -8,13 +8,13 @@ import ast
 import json
 from pathlib import Path
 
-from recode_codec import CodecAssets, CodecConfig, compress, decompress
-from recode_codec.dynamic import load_registry
-from recode_codec.dynamic.wildcard import bare_goal_token
-from recode_codec.markers import all_special_tokens
-from recode_codec.structural.aggressive import idiom_special_tokens
-from recode_codec.structural.type_pack import load_type_table
-from recode_codec.tokens import get_count_fn
+from normcore_codec import CodecAssets, CodecConfig, compress, decompress
+from normcore_codec.dynamic import load_registry
+from normcore_codec.dynamic.wildcard import bare_goal_token
+from normcore_codec.markers import all_special_tokens
+from normcore_codec.structural.aggressive import idiom_special_tokens
+from normcore_codec.structural.type_pack import load_type_table
+from normcore_codec.tokens import get_count_fn
 
 
 def ast_key(source: str) -> str:

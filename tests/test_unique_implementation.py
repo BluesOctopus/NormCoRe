@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pytest
 
-from recode_codec.dynamic import apply_dynamic_pass, load_registry
+from normcore_codec.dynamic import apply_dynamic_pass, load_registry
 
 METHOD_ROOT = Path(__file__).resolve().parents[1]
 EXPERIMENTS_ROOT = METHOD_ROOT.parent / "recode_experiments"
@@ -19,12 +19,12 @@ LIVE_TREES = (
 )
 
 UNIQUE_DEFS = {
-    "apply_structural_pass": METHOD_ROOT / "src/recode_codec/structural/__init__.py",
-    "apply_dynamic_pass": METHOD_ROOT / "src/recode_codec/dynamic/__init__.py",
-    "invert_dynamic_pass": METHOD_ROOT / "src/recode_codec/dynamic/__init__.py",
-    "compress": METHOD_ROOT / "src/recode_codec/pipeline.py",
-    "decompress": METHOD_ROOT / "src/recode_codec/pipeline.py",
-    "mine_from_sources": METHOD_ROOT / "src/recode_codec/dynamic/miner.py",
+    "apply_structural_pass": METHOD_ROOT / "src/normcore_codec/structural/__init__.py",
+    "apply_dynamic_pass": METHOD_ROOT / "src/normcore_codec/dynamic/__init__.py",
+    "invert_dynamic_pass": METHOD_ROOT / "src/normcore_codec/dynamic/__init__.py",
+    "compress": METHOD_ROOT / "src/normcore_codec/pipeline.py",
+    "decompress": METHOD_ROOT / "src/normcore_codec/pipeline.py",
+    "mine_from_sources": METHOD_ROOT / "src/normcore_codec/dynamic/miner.py",
 }
 
 

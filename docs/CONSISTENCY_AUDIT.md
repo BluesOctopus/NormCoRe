@@ -1,6 +1,6 @@
 # Release consistency notes
 
-The public release has one codec implementation under `src/recode_codec/` and
+The public release has one codec implementation under `src/normcore_codec/` and
 one canonical asset set under `assets/`. `CodecConfig.canonical()` enables the
 same structural policy, registry, type table, and grammar extension used by
 the paper-facing round-trip checks.

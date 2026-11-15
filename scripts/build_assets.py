@@ -7,8 +7,8 @@ import argparse
 import json
 from pathlib import Path
 
-from recode_codec.assets import sha256_file, validate_registry
-from recode_codec.attention.gca import (
+from normcore_codec.assets import sha256_file, validate_registry
+from normcore_codec.attention.gca import (
     build_gca_registry,
     build_policy_from_attention_cfg,
 )

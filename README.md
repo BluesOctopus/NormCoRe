@@ -6,8 +6,7 @@ paper source.
 
 ## Included
 
-- `src/recode_codec/`: reference implementation. The historical import path is
-  retained for compatibility with encoded assets and experiment scripts.
+- `src/normcore_codec/`: reference implementation and public Python package.
 - `assets/`: registry, structural policy, type table, grammar extension, and
   provenance lock used by the canonical configuration.
 - `scripts/`: asset validation, round-trip evaluation, and manifest helpers.
@@ -34,16 +33,16 @@ python -m pip install -e '.[test]'
 ## Compress and restore
 
 ```bash
-PYTHONPATH=src python -m recode_codec.cli compress example.py \
+PYTHONPATH=src python -m normcore_codec.cli compress example.py \
   --assets assets --stats > example.dialect.py
-PYTHONPATH=src python -m recode_codec.cli decompress example.dialect.py \
+PYTHONPATH=src python -m normcore_codec.cli decompress example.dialect.py \
   --assets assets > example.restored.py
 ```
 
 The Python API is:
 
 ```python
-from recode_codec import CodecAssets, CodecConfig, compress, decompress
+from normcore_codec import CodecAssets, CodecConfig, compress, decompress
 
 assets = CodecAssets.from_root("assets")
 config = CodecConfig.canonical()

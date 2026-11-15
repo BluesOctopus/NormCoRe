@@ -1,10 +1,10 @@
-from recode_codec.dynamic.wildcard import (
+from normcore_codec.dynamic.wildcard import (
     WildcardPattern,
     find_wildcard_matches,
     invert_wildcard,
     scope_reference_tokens,
 )
-from recode_codec.dynamic import apply_dynamic_pass, invert_dynamic_pass, PatternEntry
+from normcore_codec.dynamic import apply_dynamic_pass, invert_dynamic_pass, PatternEntry
 
 
 def test_wildcard_match_on_densified_pass_a_surface():
