@@ -1,5 +1,4 @@
 # NormCoRe
-
 NormCoRe is a reversible code representation for reducing the token cost of
 LLM-based code processing. This release contains the codec used in the paper,
 its locked assets and tests, lightweight experiment entry points, and the
